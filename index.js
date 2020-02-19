@@ -1,14 +1,40 @@
 require('dotenv').config();
 const Discord = require('discord.js');
-
 const client = new Discord.Client();
+const VNDB = require('vndb');
+
+(async () => {
+    try {
+        const vndb = await VNDB.start();
+        console.log('Connected to VNDB, meowster~!')
+    } catch (e) {
+        console.log("Couldn't connect to the VNDB API... Sorry meowster... >_<")
+    }
+}) ();
 
 client.on('ready', () => {
     console.log(`Hi meowster! Signed me in as ${client.user.tag} I see~`);
 });
 
 client.on('message', msg => {
+    if (msg.content.includes('<')) {
+        let leftBracketLocation = msg.content.indexOf('<');
+        let rightBracketLocation = msg.content.indexOf('>');
+        let vnTitleTemp = msg.content.substr(leftBracketLocation, rightBracketLocation);
+        let vnTitle = vnTitleTemp.slice(1, vnTitleTemp.length);
+        
+        console.log(vnTitle);
+
+
+    }
+
+    /*
+
     // CHAT EMBED LINKS
+    // LULL
+    if (msg.content.toLowerCase().includes(`<lull>`) || msg.content.toLowerCase().includes(`<funi joek>`)) {
+        msg.channel.send("Lull on Ludum Dare: http://ludumdare.com/compo/ludum-dare-31/?action=preview&uid=45841 \nVNDB: <https://vndb.org/v18116>")
+    }
     // PALINURUS
     if (msg.content.toLowerCase().includes(`<palinurus>`) || msg.content.toLowerCase().includes(`<pali>`)) {
         msg.channel.send("Palinurus on Steam: https://store.steampowered.com/app/458760/Palinurus \nVNDB: <https://vndb.org/v17129>")
@@ -45,6 +71,8 @@ client.on('message', msg => {
     if (msg.content.toLowerCase().includes(`<a field of flowers and stars>`) || msg.content.toLowerCase().includes(`<afofas>`) || msg.content.toLowerCase().includes(`<twfy>`) || msg.content.toLowerCase().includes(`<twfy.>`)) {
         msg.channel.send("A Field of Flowers and Stars on Itch: https://watercress.itch.io/afofas-demo \nVNDB: <https://vndb.org/v27130>")
     }
+
+    */
 })
 
 client.login(process.env.TOKEN);
